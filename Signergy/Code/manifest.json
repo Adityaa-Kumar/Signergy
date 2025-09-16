@@ -1,0 +1,48 @@
+{
+  "manifest_version": 3,
+  "name": "Signergy",
+  "version": "3.4",
+  "description": "Displays sign language videos for YouTube & Google Meet subtitles",
+  "permissions": [
+    "storage"
+  ],
+  "host_permissions": [
+    "https://*.google.com/"
+  ],
+  "action": {
+    "default_popup": "popup.html"
+  },
+  "background": {
+    "service_worker": "background.js",
+    "scripts": ["background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://meet.google.com/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_idle"
+    }
+  ],
+  "web_accessible_resources": [
+    {
+      "resources": [ "dictionary.json" ],
+      "matches": [
+        "https://www.youtube.com/*",
+        "https://meet.google.com/*"
+      ]
+    }
+  ],
+  "icons": {
+    "128": "Signergy.png"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "sign-language-overlay@example.com",
+      "strict_min_version": "109.0"
+    }
+  }
+}
+
