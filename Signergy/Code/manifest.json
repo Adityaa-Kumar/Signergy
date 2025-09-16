@@ -2,7 +2,7 @@
   "manifest_version": 3,
   "name": "Signergy",
   "version": "5.0",
-  "description": "Displays sign language videos for subtitles with hierarchical search.",
+  "description": "Displays sign language videos for YouTube & Google Meet subtitles",
   "permissions": [
     "storage"
   ],
@@ -44,3 +44,4 @@
     }
   }
 }
+

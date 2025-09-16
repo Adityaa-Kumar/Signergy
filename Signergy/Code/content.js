@@ -11,21 +11,26 @@ let dictionary = {};
 let isOverlayEnabled = true;
 const BASE_PATH_IN_REPO = "Signergy/Signs";
 
-// --- NEW: Variables for advanced caption handling ---
-let captionDebounceTimer = null; // Timer to wait for a pause in speech
-let transcriptHistory = ""; // "Memory" of what has been processed
+let captionDebounceTimer = null;
+let transcriptHistory = "";
 
 function initializeOverlay() {
     if (document.getElementById('sign-language-overlay')) return;
     if (!document.body) return;
 
+    // Mobile-aware adjustments
+    const isMobile = window.innerWidth < 768;
+    const overlaySize = isMobile ? '150px' : '200px';
+    const initialTop = `calc(100vh - ${isMobile ? 230 : 280}px)`;
+    const initialLeft = `calc(100vw - ${isMobile ? 170 : 220}px)`;
+
     overlay = document.createElement('div');
     overlay.id = 'sign-language-overlay';
     overlay.style.position = 'fixed';
-    overlay.style.top = 'calc(100vh - 280px)';
-    overlay.style.left = 'calc(100vw - 220px)';
-    overlay.style.width = '200px';
-    overlay.style.height = '200px';
+    overlay.style.top = initialTop;
+    overlay.style.left = initialLeft;
+    overlay.style.width = overlaySize;
+    overlay.style.height = overlaySize;
     overlay.style.backgroundColor = 'rgba(0, 0, 0, 0.8)';
     overlay.style.border = '2px solid #a78bfa';
     overlay.style.borderRadius = '10px';
@@ -58,22 +63,34 @@ function initializeOverlay() {
     signVideo.muted = true;
     signVideo.loop = false;
     signVideo.playbackRate = 2.5;
+    signVideo.playsInline = true; // Essential for mobile browsers
     overlay.appendChild(signVideo);
 
     let isDragging = false;
     let offsetX, offsetY;
-    overlay.addEventListener('mousedown', (e) => {
+    
+    // Combined touch and mouse event handlers
+    const dragStart = (e) => {
         isDragging = true;
-        offsetX = e.clientX - overlay.getBoundingClientRect().left;
-        offsetY = e.clientY - overlay.getBoundingClientRect().top;
+        const event = e.touches ? e.touches[0] : e;
+        offsetX = event.clientX - overlay.getBoundingClientRect().left;
+        offsetY = event.clientY - overlay.getBoundingClientRect().top;
         e.preventDefault();
-    });
-    document.addEventListener('mousemove', (e) => {
+    };
+    const dragMove = (e) => {
         if (!isDragging) return;
-        overlay.style.left = `${e.clientX - offsetX}px`;
-        overlay.style.top = `${e.clientY - offsetY}px`;
-    });
-    document.addEventListener('mouseup', () => { isDragging = false; });
+        const event = e.touches ? e.touches[0] : e;
+        overlay.style.left = `${event.clientX - offsetX}px`;
+        overlay.style.top = `${event.clientY - offsetY}px`;
+    };
+    const dragEnd = () => { isDragging = false; };
+
+    overlay.addEventListener('mousedown', dragStart);
+    document.addEventListener('mousemove', dragMove);
+    document.addEventListener('mouseup', dragEnd);
+    overlay.addEventListener('touchstart', dragStart, { passive: false });
+    document.addEventListener('touchmove', dragMove, { passive: false });
+    document.addEventListener('touchend', dragEnd);
 }
 
 function processNewText(text) {
@@ -121,7 +138,6 @@ function addSignToQueue(key, category) {
     const fileName = dictionary[category]?.[key];
     if (fileName) {
         const url = `https://raw.githubusercontent.com/${dictionary._repo_user}/${dictionary._repo_name}/main/${BASE_PATH_IN_REPO}/${category}/${fileName}`;
-        // **MODIFIED:** Added 'category' to the queue item to identify letters later.
         signQueue.push({ key, fileName, url, category });
     }
 }
@@ -161,12 +177,9 @@ function displayNextSign() {
         signVideo.play().catch(e => console.error("Video play failed:", e));
         const durationInSeconds = signVideo.duration / signVideo.playbackRate;
 
-        // **MODIFIED:** Use different timing for letters vs. words/sentences.
         if (sign.category === 'letters') {
-            // Use a much shorter delay for faster fingerspelling.
             setTimeout(displayNextSign, (durationInSeconds * 1000) * 0.5); 
         } else {
-            // Use the normal delay for words and sentences.
             setTimeout(displayNextSign, (durationInSeconds * 1000) + 200);
         }
     };
@@ -183,16 +196,28 @@ function displayNextSign() {
 function startObserver() {
     let captionContainer = null;
     let site = '';
-    if (window.location.hostname === 'www.youtube.com') {
+    const hostname = window.location.hostname;
+
+    if (hostname === 'www.youtube.com') {
         captionContainer = document.querySelector('.ytp-caption-window-container');
-        site = 'youtube';
-    } else if (window.location.hostname === 'meet.google.com') {
+        site = 'youtube-desktop';
+    } else if (hostname === 'm.youtube.com') {
+        const mobileSelectors = ['.ytm-timed-text-container', '.caption-window', '.player-timed-text-container'];
+        for(const selector of mobileSelectors) {
+            captionContainer = document.querySelector(selector);
+            if (captionContainer) {
+                site = 'youtube-mobile';
+                break;
+            }
+        }
+    } else if (hostname === 'meet.google.com') {
         const meetSelectors = ['[jsname="dsdcsc"]', '.a4cQT', '.adErb', '.ADivge[data-is-captions]'];
         for (const selector of meetSelectors) {
             captionContainer = document.querySelector(selector);
             if (captionContainer) { site = 'meet'; break; }
         }
     }
+    
     if (captionContainer) {
         if (overlay) overlay.querySelector('p').textContent = 'Observer active!';
         
@@ -200,12 +225,12 @@ function startObserver() {
             clearTimeout(captionDebounceTimer);
             captionDebounceTimer = setTimeout(() => {
                 let fullTranscript = '';
-                if (site === 'youtube') {
-                    fullTranscript = captionContainer.textContent.replace(/\s+/g, ' ').trim();
-                } else if (site === 'meet') {
+                if (site === 'meet') {
                     const captionElements = captionContainer.querySelectorAll('.ygicle.VbkSUe');
                     captionElements.forEach(el => { fullTranscript += el.textContent + ' '; });
                     fullTranscript = fullTranscript.replace(/\s+/g, ' ').trim();
+                } else { // Handles both youtube-desktop and youtube-mobile
+                    fullTranscript = captionContainer.textContent.replace(/\s+/g, ' ').trim();
                 }
 
                 if (fullTranscript === transcriptHistory) return;
