@@ -2,17 +2,35 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="popup.css">
 </head>
 <body>
     <div class="container">
-        <h3>Debug Options</h3>
-        <p>Show media filename in overlay.</p>
-        <label class="switch">
-            <input type="checkbox" id="debugToggle">
-            <span class="slider round"></span>
-        </label>
+        <h3>Signergy Controls</h3>
+        
+        <div class="control-group">
+            <p>Enable Overlay</p>
+            <label class="switch">
+                <input type="checkbox" id="enableToggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+
+        <hr>
+
+        <div class="control-group">
+            <p class="debug-text">Show Media Filename</p>
+            <label class="switch">
+                <input type="checkbox" id="debugToggle">
+                <span class="slider round"></span>
+            </label>
+        </div>
+        
+        <hr>
+
+        <button id="reloadButton" class="button">Reload Overlay</button>
+        <p class="small-text">Use if the overlay disappears or stops working.</p>
+
     </div>
     <script src="popup.js"></script>
 </body>

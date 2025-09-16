@@ -1,28 +1,49 @@
-const browserApi = typeof browser !== 'undefined' ? browser : chrome;
-
 document.addEventListener('DOMContentLoaded', () => {
+    const browserApi = typeof browser !== 'undefined' ? browser : chrome;
+    
+    const enableToggle = document.getElementById('enableToggle');
     const debugToggle = document.getElementById('debugToggle');
+    const reloadButton = document.getElementById('reloadButton');
 
-    // Get the initial state from storage and set the toggle accordingly
-    browserApi.storage.sync.get('showDebug', (data) => {
+    // Load saved settings from storage
+    browserApi.storage.sync.get(['isOverlayEnabled', 'showDebug'], (data) => {
+        // Default to enabled if not set
+        enableToggle.checked = typeof data.isOverlayEnabled === 'undefined' ? true : data.isOverlayEnabled;
         debugToggle.checked = !!data.showDebug;
     });
 
-    // Listen for changes on the toggle switch
-    debugToggle.addEventListener('change', () => {
-        const showDebug = debugToggle.checked;
+    // Main overlay toggle
+    enableToggle.addEventListener('change', () => {
+        const isEnabled = enableToggle.checked;
+        browserApi.storage.sync.set({ isOverlayEnabled: isEnabled });
         
-        // Save the new state to storage
-        browserApi.storage.sync.set({ showDebug: showDebug });
-
-        // Send a message to the active tab's content script to update its state
-        browserApi.tabs.query({ active: true, currentWindow: true }, (tabs) => {
-            if (tabs[0] && tabs[0].id) {
-                browserApi.tabs.sendMessage(tabs[0].id, { 
-                    action: 'toggleDebug', 
-                    showDebug: showDebug 
-                });
-            }
+        sendMessageToContentScript({ 
+            action: isEnabled ? 'enableOverlay' : 'disableOverlay' 
         });
     });
+
+    // Debug info toggle
+    debugToggle.addEventListener('change', () => {
+        const showDebug = debugToggle.checked;
+        browserApi.storage.sync.set({ showDebug: showDebug });
+
+        sendMessageToContentScript({ 
+            action: 'toggleDebug', 
+            showDebug: showDebug 
+        });
+    });
+
+    // Reload button
+    reloadButton.addEventListener('click', () => {
+        sendMessageToContentScript({ action: 'reloadOverlay' });
+    });
+
+    function sendMessageToContentScript(message) {
+        browserApi.tabs.query({ active: true, currentWindow: true }, (tabs) => {
+            if (tabs[0] && tabs[0].id) {
+                browserApi.tabs.sendMessage(tabs[0].id, message)
+                    .catch(err => console.log("Signergy popup: Could not send message to content script.", err));
+            }
+        });
+    }
 });

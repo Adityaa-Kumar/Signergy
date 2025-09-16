@@ -1,8 +1,8 @@
 {
   "manifest_version": 3,
   "name": "Signergy",
-  "version": "4.0",
-  "description": "Displays sign language videos for YouTube & Google Meet subtitles",
+  "version": "5.0",
+  "description": "Displays sign language videos for subtitles with hierarchical search.",
   "permissions": [
     "storage"
   ],
@@ -10,13 +10,15 @@
     "https://raw.githubusercontent.com/*"
   ],
   "action": {
-    "default_popup": "popup.html"
+    "default_popup": "popup.html",
+    "default_icon": "Signergy.png"
   },
   "content_scripts": [
     {
       "matches": [
         "https://www.youtube.com/*",
-        "https://meet.google.com/*"
+        "https://meet.google.com/*",
+        "https://m.youtube.com/*"
       ],
       "js": ["content.js"],
       "run_at": "document_idle"
@@ -27,7 +29,8 @@
       "resources": [ "dictionary.json" ],
       "matches": [
         "https://www.youtube.com/*",
-        "https://meet.google.com/*"
+        "https://meet.google.com/*",
+        "https://m.youtube.com/*"
       ]
     }
   ],
