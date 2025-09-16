@@ -115,52 +115,39 @@ function displayNextSign() {
 function displaySignForWord(word) {
     if (!overlay) return;
 
-    const fileId = dictionary[word];
-    if (!fileId) {
-        displayNextSign();
+    const fileName = dictionary[word];
+    if (!fileName) {
+        displayNextSign(); 
         return;
     }
     
-    // Ask the background script to fetch the video as a secure blob
-    browserApi.runtime.sendMessage({ action: 'fetchVideoAsBlob', fileId: fileId }, (response) => {
-        if (response && response.success) {
-            const blobUrl = response.blobUrl;
+    // CORRECTED URL: Added "Signergy/Signs/" to the path to match your repository structure.
+    const url = `https://raw.githubusercontent.com/${dictionary._repo_user}/${dictionary._repo_name}/main/Signergy/Signs/${fileName}`;
 
-            overlay.querySelector('p').style.display = 'none';
-            signImage.style.display = 'none';
-            if (!signVideo.paused) signVideo.pause();
+    overlay.querySelector('p').style.display = 'none';
+    signImage.style.display = 'none';
+    if (!signVideo.paused) signVideo.pause();
 
-            signVideo.style.display = 'block';
-            if (showDebugInfo) {
-                debugText.textContent = `${word}.mp4 (Blob)`;
-                debugText.style.display = 'block';
-            }
+    signVideo.style.display = 'block';
+    if (showDebugInfo) {
+        debugText.textContent = fileName;
+        debugText.style.display = 'block';
+    }
 
-            const onVideoReady = () => {
-                // Revoke the old blob URL to prevent memory leaks, if it exists
-                if (signVideo.currentBlobUrl) {
-                    URL.revokeObjectURL(signVideo.currentBlobUrl);
-                }
-                signVideo.currentBlobUrl = blobUrl; // Store the new blob URL
+    const onVideoReady = () => {
+        signVideo.play().catch(e => console.error("Video play failed:", e));
+        const durationInSeconds = signVideo.duration / signVideo.playbackRate;
+        setTimeout(displayNextSign, (durationInSeconds * 1000) + 200); 
+    };
 
-                signVideo.play().catch(e => console.error("Video play failed:", e));
-                const durationInSeconds = signVideo.duration / signVideo.playbackRate;
-                setTimeout(displayNextSign, (durationInSeconds * 1000) + 200);
-            };
+    const onVideoError = () => {
+        console.error(`Failed to load video for word: ${word} from ${url}`);
+        displayNextSign();
+    };
 
-            const onVideoError = () => {
-                console.error(`Failed to load video blob for word: ${word}`);
-                displayNextSign();
-            };
-
-            signVideo.addEventListener('loadeddata', onVideoReady, { once: true });
-            signVideo.addEventListener('error', onVideoError, { once: true });
-            signVideo.src = blobUrl;
-        } else {
-            console.error(`Background script failed to fetch blob for word: ${word}`, response ? response.error : "No response");
-            displayNextSign();
-        }
-    });
+    signVideo.addEventListener('loadeddata', onVideoReady, { once: true });
+    signVideo.addEventListener('error', onVideoError, { once: true });
+    signVideo.src = url;
 }
 
 
@@ -269,4 +256,3 @@ browserApi.runtime.onMessage.addListener((request) => {
 });
 
 main();
-

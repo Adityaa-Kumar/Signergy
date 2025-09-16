@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Oops, HTTP 404</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<meta name="Keywords" content="ASL, American Sign Language, Sign Language, dictionary dictionary" />
+<link rel="stylesheet" type="text/css" href="/tool/css/header.css" media="screen" />
+</head>
+<body>
+<!-- Copyright (c) 1996-2005 Jolanta Lapiak -->
+
+
+<div class="header">
+<!-- header.css APRIL 2015-2016 -->
+<nav role="custom-dropdown">
+    <input type="checkbox" id="button">
+    <label for="button" onclick></label>
+    
+<ul class="menusite">
+<li class="" ><a itemprop="url" href="https://www.handspeak.com/" title="Home"><img itemprop="logo" src="/pix/icon-home.png" width="10" height="10" alt="Home"></a>
+</li>
+<li class="" ><a href="/word/search/" title="Sign Language dictionary">ASL Dictionary</a></li>
+        <li class=""><a href="/learn/" title="ASL tutorials">Learn ASL</a></li>
+        <li class=""><a href="/kid/asl/" title="Signing with children">ASL for Kids</a></li>
+
+<li class=""><a href="/translate/" title="Translation">Translation</a>
+	</li>
+    
+<li class=""><a href="/spell/" title="Fignerspelling">Fingerspelling</a>
+	</li>
+<li class=""><a href="/culture/" title="Sign language culture">Culture</a>
+</li>
+
+<li class=""><a href="/write/asl/" title="written signed language">ASL writing</a>
+	</li>
+    
+<li class=""><a href="/study/" title="Deaf cultural studies">Library</a>
+</li>
+    
+<li class=""><a href="/info/" title="Search" rel="nofollow"><img src="/pix/icon-search.png" width="10" height="10" alt="Search"></a>
+</li>
+  
+</ul>
+</nav>
+</div>
+
+<div class="grid-main">
+
+<div class="grid-box">
+<h2 class="title-bar">Uh-oh! Page not found</h2>
+<section class="post">
+<p>
+Sorry, pal. The page you requested may have been moved or renamed.
+</p>
+<!--<p>
+You probably have followed a wrong external link or mistyped a web address.</p>
+<p> 
+The page may have been either recently thrown away, renamed, relocated or made temporarily unavailable.
+</p>-->
+<p>
+<b>What you can do:</b>
+</p>
+<p>
+<ul>
+<li> Check for a typo in your URL (web address).</li>
+<li> Try again. Search using the box above.</li>
+<li> Start again at home page at <a href="http://www.handspeak.com/">www.handspeak.com</a> and look for some information you want.
+<li> Email me for help</li>
+</ul>
+</p>
+
+<p>
+<a href="/word/">Search ASL Dictionary</a>
+</p>
+</section>
+</div>
+      
+<div class="grid-box">
+<section class="post">
+<p>
+<img src="/pix/errormessage.jpg" alt="error page"></p>
+
+</section>
+
+
+</div><!--end page -->
+
+</div><!--end content -->
+
+<footer>
+<!-- HS FOOTER -->
+<!-- <span style="-webkit-transform: rotate(45deg);transform: rotate(45deg);">&#9906;</span> -->
+<div class="footlink">
+<ul>
+<li><a href="http://www.handspeak.com/info/" rel="nofollow">🔎︎ SEARCH</a></li>
+ <li><a href="http://www.handspeak.com/info/index.php?info=app">&#x2605; APP</a></li>
+<li><a href="/tool/email/" rel="nofollow">&#9993; CONTACT</a></li>
+<li><a href="/info/index.php?info=donate" rel="nofollow">GIVE BACK &#10084; TO THIS SITE</a></li>
+</ul>
+</div> <!-- end id navtool -->
+<div class="footer-grid">
+<p>
+<img src="/pix/hslogo2019.svg" width="30px" height="30px" alt="handspeak.com logo" style="padding-right:20px; float:left;">
+<!-- <img src="/pix/hslogoimage2011-90.jpg" width="30" height="30" alt="handspeak.com logo" > -->
+<!--<img src="/info/about/jolanta.jpg" width="100" height="100" alt="jolanta lapiak">-->
+</p>
+<p>
+ASL on this site primarily comes from authentic culturally Deaf people and codas who speak ASL and other signed languages as their first language. This site creator is an ASL instructor and native signer who expresses love and passion for our sign language and culture <a href="/info/index.php?info=about" title="about the site">[...]</a>
+</p>
+</div>
+
+<!-- <section class="footer-grid">
+<h4 class="footer-title">Follow or share</h4>
+<ul style="list-style-type:none;">
+<li>
+<a href="http://www.youtube.com/user/TheHandspeak" target="_blank" rel="nofollow">YouTube</a></li>
+<li>
+<a href="https://plus.google.com/117046585397298185856" target="_blank" rel="nofollow">Google Plus</a>
+</li> 
+<li>
+<a href="https://www.facebook.com/pages/Handspeak/135791766826" target="_blank" rel="nofollow">Facebook</a></li>
+<li><a href="http://www.twitter.com/handspeak/" target="_blank" rel="nofollow">Twitter</a></li>
+</ul>
+</section> -->
+
+<div class="copyright">
+<a href="/info/index.php?info=copyright" rel="nofollow">Copyright</a> &copy; 1996-2019 Jolanta Lapiak. All Rights Reserved. Handspeak&#174; trademarked. 
+| <a href="/info/index.php?info=copyright" rel="nofollow">privacy policy</a> |
+<a href="/info/index.php?info=linkus" rel="nofollow">link to us</a> | <a href="javascript:window.external.addFavorite('http://www.handspeak.com','HandSpeak: Sign Language Online');" rel="nofollow">bookmark</a>
+</div>
+</footer>
+
+</body>
+</html>
